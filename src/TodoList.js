@@ -1,61 +1,87 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import "./TodoList.css";
 
-export default function TodoList({ username }) {
-  const [tasks, setTasks] = useState([]);
-  const [text, setText] = useState("");
+const TodoList = ({ username }) => {
+  // Load tasks from localStorage for this user
+  const [tasks, setTasks] = useState(() => {
+    if (!username) return [];
+    const saved = localStorage.getItem(`tasks-${username}`);
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  // STEP 3 — FETCH TASKS (HERE)
+  const [newTask, setNewTask] = useState("");
+
+  // Save tasks whenever they change
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/tasks/${username}`)
-      .then(res => setTasks(res.data));
-  }, [username]);
+    if (username) {
+      localStorage.setItem(`tasks-${username}`, JSON.stringify(tasks));
+    }
+  }, [tasks, username]);
+
+  // Browser notification for pending tasks
+  useEffect(() => {
+    if (!("Notification" in window)) return;
+
+    if (tasks.some((t) => !t.done)) {
+      Notification.requestPermission();
+    }
+  }, [tasks]);
 
   const addTask = () => {
-    if (!text) return;
-    axios
-      .post(`http://localhost:5000/tasks/${username}`, {
-        text,
-        done: false
-      })
-      .then(res => setTasks(res.data));
-    setText("");
+    if (newTask.trim() === "") return;
+    setTasks([...tasks, { text: newTask, done: false }]);
+    setNewTask("");
   };
 
-  const toggleTask = (i) => {
-    axios
-      .put(`http://localhost:5000/tasks/${username}/${i}`, {
-        done: !tasks[i].done
-      })
-      .then(res => setTasks(res.data));
+  const toggleTask = (index) => {
+    const updated = [...tasks];
+    updated[index].done = !updated[index].done;
+    setTasks(updated);
   };
 
-  const deleteTask = (i) => {
-    axios
-      .delete(`http://localhost:5000/tasks/${username}/${i}`)
-      .then(res => setTasks(res.data));
+  const deleteTask = (index) => {
+    const updated = tasks.filter((_, i) => i !== index);
+    setTasks(updated);
   };
+
+  const allCompleted = tasks.length > 0 && tasks.every((t) => t.done);
 
   return (
     <div className="todo-container">
+      {/* INPUT BOX */}
       <div className="task-box">
         <input
-          value={text}
-          onChange={e => setText(e.target.value)}
-          placeholder="Add a task"
+          type="text"
+          placeholder="Add a task for today..."
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
         />
         <button onClick={addTask}>Add</button>
       </div>
 
-      {tasks.map((t, i) => (
-        <div key={i} className={t.done ? "done task" : "task"}>
-          <input type="checkbox" checked={t.done} onChange={() => toggleTask(i)} />
-          <span>{t.text}</span>
-          <button onClick={() => deleteTask(i)}>✕</button>
+      {/* TODO LIST */}
+      <ul className="todo-list">
+        {tasks.map((task, index) => (
+          <li key={index} className={task.done ? "done" : ""}>
+            <input
+              type="checkbox"
+              checked={task.done}
+              onChange={() => toggleTask(index)}
+            />
+            <span>{task.text}</span>
+            <button onClick={() => deleteTask(index)}>✕</button>
+          </li>
+        ))}
+      </ul>
+
+      {/* CONGRATS MESSAGE */}
+      {allCompleted && (
+        <div className="congrats">
+          🎉 Amazing! You completed all your tasks 🌸
         </div>
-      ))}
+      )}
     </div>
   );
-}
+};
+
+export default TodoList;

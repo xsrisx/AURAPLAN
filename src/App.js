@@ -4,11 +4,12 @@ import TodoList from "./TodoList";
 import Calendar from "./Calendar";
 
 function App() {
+  // AUTH STATES
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loggedInUser, setLoggedInUser] = useState(null);
 
-  // Quotes
+  // QUOTES (rotate every 5s)
   const quotes = [
     "Small steps every day 🌱",
     "You are doing better than you think 💫",
@@ -27,13 +28,14 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Random images (fade effect)
+  // RANDOM IMAGES (change on refresh)
   const [imgSeed] = useState(Math.random());
 
   const handleSignIn = () => {
     if (username.trim() && password.trim()) {
       setLoggedInUser(username);
-      setPassword("");
+    } else {
+      alert("Please enter both username and password");
     }
   };
 
@@ -41,7 +43,7 @@ function App() {
     <div className="layout">
       {/* HEADER */}
       <header className="header">
-        <h2>AuraPlan 🌸</h2>
+        <h2 className="logo">AuraPlan 🌸</h2>
 
         {!loggedInUser ? (
           <div className="signin-box">
@@ -61,7 +63,7 @@ function App() {
           </div>
         ) : (
           <div className="welcome-text">
-            Welcome, {loggedInUser} 🌿
+            Welcome, <strong>{loggedInUser}</strong> 🌿
           </div>
         )}
       </header>
@@ -70,45 +72,40 @@ function App() {
       <div className="content">
         {/* LEFT SIDEBAR */}
         <aside className="left">
-          <div className="image-row">
+          <div className="image-stack">
             <img
               src={`https://picsum.photos/300/200?random=${imgSeed}`}
-              alt="aesthetic"
-              className="fade-img"
+              alt="motivation"
+              className="side-img fade"
             />
             <img
               src={`https://picsum.photos/300/200?random=${imgSeed + 1}`}
-              alt="aesthetic"
-              className="fade-img"
+              alt="study"
+              className="side-img fade"
             />
           </div>
 
           <div className="stories">
-            <h3>Daily Inspiration</h3>
+            <h3>Motivational Story</h3>
             <p>
-              <strong>APJ Abdul Kalam:</strong> Sold newspapers as a child and
-              became the President of India 🚀
-            </p>
-            <p>
-              <strong>Elon Musk:</strong> Faced multiple failures before Tesla
-              and SpaceX succeeded 🔥
-            </p>
-            <p>
-              <strong>Marie Curie:</strong> First woman to win a Nobel Prize 🧪
+              <strong>APJ Abdul Kalam:</strong>  
+              Failed multiple times, lived humbly, and became the President of India.
+              His life proves dreams don’t need privilege — only persistence.
             </p>
           </div>
         </aside>
 
-        {/* CENTER */}
+        {/* CENTER BAR */}
         <main className="center">
-          <h1>Welcome back 🌿</h1>
-          <h3 className="quote">{quotes[quoteIndex]}</h3>
+          <h1>Stay Consistent 🌿</h1>
+          <h3 className="quote fade">{quotes[quoteIndex]}</h3>
 
+          {/* TODO LIST APPEARS ONLY AFTER SIGN-IN */}
           {loggedInUser ? (
             <TodoList username={loggedInUser} />
           ) : (
-            <p className="signin-msg">
-              Please sign in to start planning your day ✨
+            <p className="signin-hint">
+              Sign in to view and manage your tasks ✨
             </p>
           )}
         </main>
