@@ -25,8 +25,9 @@ function App() {
     const interval = setInterval(() => {
       setQuoteIndex((prev) => (prev + 1) % quotes.length);
     }, 5000);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [quotes.length]);
 
   // RANDOM IMAGES (change on refresh)
   const [imgSeed] = useState(Math.random());
@@ -88,9 +89,9 @@ function App() {
           <div className="stories">
             <h3>Motivational Story</h3>
             <p>
-              <strong>APJ Abdul Kalam:</strong>  
-              Failed multiple times, lived humbly, and became the President of India.
-              His life proves dreams don’t need privilege — only persistence.
+              <strong>APJ Abdul Kalam:</strong> Failed multiple times, lived
+              humbly, and became the President of India. His life proves dreams
+              don’t need privilege — only persistence.
             </p>
           </div>
         </aside>
@@ -100,7 +101,6 @@ function App() {
           <h1>Stay Consistent 🌿</h1>
           <h3 className="quote fade">{quotes[quoteIndex]}</h3>
 
-          {/* TODO LIST APPEARS ONLY AFTER SIGN-IN */}
           {loggedInUser ? (
             <TodoList username={loggedInUser} />
           ) : (
