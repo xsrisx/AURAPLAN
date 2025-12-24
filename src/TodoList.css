@@ -1,0 +1,59 @@
+.task-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.task-box input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.task-box button {
+  background: #6a5acd;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.todo-list {
+  list-style: none;
+  margin-top: 10px;
+}
+
+.todo-list li {
+  background: #f6f7fb;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.todo-list li.done span {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.todo-list li button {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: red;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.congrats {
+  margin-top: 15px;
+  padding: 12px;
+  background: #e6ffe9;
+  border-radius: 10px;
+  color: #2e7d32;
+  font-weight: 600;
+}

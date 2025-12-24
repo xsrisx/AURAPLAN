@@ -1,0 +1,36 @@
+.calendar-container {
+  text-align: center;
+}
+
+.calendar-container h3 {
+  color: #6a5acd;
+  margin-bottom: 10px;
+}
+
+.calendar-container button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: #6a5acd;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.calendar-day {
+  padding: 10px;
+  background: #f6f7fb;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.calendar-day.marked {
+  background: #6a5acd;
+  color: white;
+}
